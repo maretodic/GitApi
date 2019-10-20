@@ -1,0 +1,194 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="api_testModel.Store" Provider="MySql.Data.MySqlClient" ProviderManifestToken="8.0" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="predmet">
+          <Key>
+            <PropertyRef Name="naziv" />
+          </Key>
+          <Property Name="naziv" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="sifru" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="kratak_opis" Type="text" Nullable="false" />
+          <Property Name="godina" Type="int" Nullable="false" />
+          <Property Name="lab_vezbe" Type="bool" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="profesors">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="ime" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="srednje_ime" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Prezime" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="datum_rodjenja" Type="date" Nullable="false" />
+          <Property Name="datum_postavljenja" Type="date" Nullable="false" />
+          <Property Name="naziv_predmeta" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="students">
+          <Key>
+            <PropertyRef Name="br_indeksa" />
+          </Key>
+          <Property Name="ime" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="srednje_ime" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="prezime" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="datum_rodjenja" Type="date" Nullable="false" />
+          <Property Name="br_indeksa" Type="int" Nullable="false" />
+          <Property Name="jmbg" Type="varchar" MaxLength="13" Nullable="false" />
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <Association Name="profesors_ibfk_1">
+          <End Role="predmet" Type="Self.predmet" Multiplicity="1" />
+          <End Role="profesors" Type="Self.profesors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="predmet">
+              <PropertyRef Name="naziv" />
+            </Principal>
+            <Dependent Role="profesors">
+              <PropertyRef Name="naziv_predmeta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="api_testModelStoreContainer">
+          <EntitySet Name="predmet" EntityType="Self.predmet" Schema="api_test" store:Type="Tables" />
+          <EntitySet Name="profesors" EntityType="Self.profesors" Schema="api_test" store:Type="Tables" />
+          <EntitySet Name="students" EntityType="Self.students" Schema="api_test" store:Type="Tables" />
+          <AssociationSet Name="profesors_ibfk_1" Association="Self.profesors_ibfk_1">
+            <End Role="predmet" EntitySet="predmet" />
+            <End Role="profesors" EntitySet="profesors" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="api_testModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="predmet">
+          <Key>
+            <PropertyRef Name="naziv" />
+          </Key>
+          <Property Name="naziv" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="sifru" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="kratak_opis" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="godina" Type="Int32" Nullable="false" />
+          <Property Name="lab_vezbe" Type="Boolean" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="profesors" Relationship="Self.profesors_ibfk_1" FromRole="predmet" ToRole="profesors" />
+        </EntityType>
+        <EntityType Name="profesors">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="ime" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="srednje_ime" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Prezime" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="datum_rodjenja" Type="DateTime" Nullable="false" />
+          <Property Name="datum_postavljenja" Type="DateTime" Nullable="false" />
+          <Property Name="naziv_predmeta" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="predmet" Relationship="Self.profesors_ibfk_1" FromRole="profesors" ToRole="predmet" />
+        </EntityType>
+        <EntityType Name="students">
+          <Key>
+            <PropertyRef Name="br_indeksa" />
+          </Key>
+          <Property Name="ime" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="srednje_ime" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="prezime" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="datum_rodjenja" Type="DateTime" Nullable="false" />
+          <Property Name="br_indeksa" Type="Int32" Nullable="false" />
+          <Property Name="jmbg" Type="String" MaxLength="13" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <Association Name="profesors_ibfk_1">
+          <End Role="predmet" Type="Self.predmet" Multiplicity="1" />
+          <End Role="profesors" Type="Self.profesors" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="predmet">
+              <PropertyRef Name="naziv" />
+            </Principal>
+            <Dependent Role="profesors">
+              <PropertyRef Name="naziv_predmeta" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="api_testEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="predmet" EntityType="Self.predmet" />
+          <EntitySet Name="profesors" EntityType="Self.profesors" />
+          <EntitySet Name="students" EntityType="Self.students" />
+          <AssociationSet Name="profesors_ibfk_1" Association="Self.profesors_ibfk_1">
+            <End Role="predmet" EntitySet="predmet" />
+            <End Role="profesors" EntitySet="profesors" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="api_testModelStoreContainer" CdmEntityContainer="api_testEntities">
+          <EntitySetMapping Name="predmet">
+            <EntityTypeMapping TypeName="api_testModel.predmet">
+              <MappingFragment StoreEntitySet="predmet">
+                <ScalarProperty Name="naziv" ColumnName="naziv" />
+                <ScalarProperty Name="sifru" ColumnName="sifru" />
+                <ScalarProperty Name="kratak_opis" ColumnName="kratak_opis" />
+                <ScalarProperty Name="godina" ColumnName="godina" />
+                <ScalarProperty Name="lab_vezbe" ColumnName="lab_vezbe" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="profesors">
+            <EntityTypeMapping TypeName="api_testModel.profesors">
+              <MappingFragment StoreEntitySet="profesors">
+                <ScalarProperty Name="ime" ColumnName="ime" />
+                <ScalarProperty Name="srednje_ime" ColumnName="srednje_ime" />
+                <ScalarProperty Name="Prezime" ColumnName="Prezime" />
+                <ScalarProperty Name="datum_rodjenja" ColumnName="datum_rodjenja" />
+                <ScalarProperty Name="datum_postavljenja" ColumnName="datum_postavljenja" />
+                <ScalarProperty Name="naziv_predmeta" ColumnName="naziv_predmeta" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="students">
+            <EntityTypeMapping TypeName="api_testModel.students">
+              <MappingFragment StoreEntitySet="students">
+                <ScalarProperty Name="ime" ColumnName="ime" />
+                <ScalarProperty Name="srednje_ime" ColumnName="srednje_ime" />
+                <ScalarProperty Name="prezime" ColumnName="prezime" />
+                <ScalarProperty Name="datum_rodjenja" ColumnName="datum_rodjenja" />
+                <ScalarProperty Name="br_indeksa" ColumnName="br_indeksa" />
+                <ScalarProperty Name="jmbg" ColumnName="jmbg" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
