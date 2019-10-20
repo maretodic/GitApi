@@ -8,8 +8,8 @@ namespace WebApiGit.Models
 {
     public class Context
     {
-        public DbSet<ProfesorModel> profesors { get; set; }
-        public DbSet<PredmetModel> predmets { get; set; }
-        public DbSet<StudentModel> students { get; set; }
+        public DbSet<ProfesorModel> profesorModels { get; set; }
+        public DbSet<PredmetModel> predmetModels { get; set; }
+        public DbSet<StudentModel> studentModels { get; set; }
     }
 }
