@@ -64,5 +64,30 @@ namespace WebApiGit.Controllers
                 return Ok();
             }
         }
+
+        //PUT: api/predmet
+        [HttpPut]
+        [Route("api/predmet")]
+        public IHttpActionResult Put([FromBody] PredmetModel predmetModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Data");
+            }
+
+            predmet predmetInDb = _predmetRepository.GetById(predmetModel.ID);
+
+            if (predmetInDb == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _predmetRepository.Edit(predmetInDb, predmetModel);
+                return Ok();
+            }
+        }
+
+
     }
 }
