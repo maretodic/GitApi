@@ -88,6 +88,27 @@ namespace WebApiGit.Controllers
             }
         }
 
+        //DELETE: api/5/predmet
+        [HttpDelete]
+        [Route("api/{id}/predmet")]
+        public IHttpActionResult Delete([FromUri] int id)
+        {
+            if(id <= 0)
+            {
+                return BadRequest("Invalid Id");
+            }
 
+            predmet predmetInDb = _predmetRepository.GetById(id);
+
+            if(predmetInDb == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _predmetRepository.Delete(predmetInDb);
+                return Ok();
+            }
+        }
     }
 }
