@@ -48,5 +48,21 @@ namespace WebApiGit.Controllers
                 return Ok(predmetModel);
             }
         }
+
+        //POST: api/predmet
+        [HttpPost]
+        [Route("api/predmet")]
+        public IHttpActionResult Post([FromBody] PredmetModel predmetModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Data");
+            }
+            else
+            {
+                _predmetRepository.Create(predmetModel);
+                return Ok();
+            }
+        }
     }
 }
