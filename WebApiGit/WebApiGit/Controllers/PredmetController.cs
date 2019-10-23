@@ -30,5 +30,23 @@ namespace WebApiGit.Controllers
             }
             else return Ok(list);
         }
+
+        //GET: api/5/predmet
+        [HttpGet]
+        [Route("api/{id}/predmet")]
+        public IHttpActionResult GetByID([FromUri]int id)
+        {
+            predmet predmetInDB = _predmetRepository.GetById(id);
+            if(predmetInDB == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                PredmetModel predmetModel = new PredmetModel();
+                Mapper.Map(predmetInDB, predmetModel);
+                return Ok(predmetModel);
+            }
+        }
     }
 }
