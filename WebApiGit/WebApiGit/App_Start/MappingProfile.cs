@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using WebApiGit.Models;
 using AutoMapper;
+using WebApiGit.Models;
 
 namespace WebApiGit.App_Start
 {
@@ -14,11 +14,11 @@ namespace WebApiGit.App_Start
             CreateMap<predmet, PredmetModel>();
             CreateMap<PredmetModel, predmet>().ForMember(c => c.id, opt => opt.Ignore());
 
-            CreateMap<profesors, ProfesorModel>();
-            CreateMap<ProfesorModel, profesors>().ForMember(c => c.id, opt => opt.Ignore());
-
             CreateMap<students, StudentModel>();
             CreateMap<StudentModel, students>().ForMember(c => c.id, opt => opt.Ignore());
+
+            CreateMap<profesors, ProfesorModel>();
+            CreateMap<ProfesorModel, profesors>().ForMember(c => c.id, opt => opt.Ignore());
         }
     }
 }
