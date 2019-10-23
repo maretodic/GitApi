@@ -12,6 +12,23 @@ namespace WebApiGit.Controllers
 {
     public class PredmetController : ApiController
     {
+        private readonly IPredmetRepository _predmetRepository;
+        public PredmetController(IPredmetRepository predmetRepository)
+        {
+            this._predmetRepository = predmetRepository;
+        }
 
+        //GET: api/predmet
+        [HttpGet]
+        [Route("api/predmet")]
+        public IHttpActionResult Get()
+        {
+            List<PredmetModel> list = _predmetRepository.Get();
+            if (list.Count == 0)
+            {
+                return NotFound();
+            }
+            else return Ok(list);
+        }
     }
 }
