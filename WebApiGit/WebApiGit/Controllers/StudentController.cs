@@ -85,5 +85,27 @@ namespace WebApiGit.Controllers
                 return Ok();
             }
         }
+
+        //DELETE api/5/student
+        [HttpDelete]
+        [Route("api/{id}/student")]
+        public IHttpActionResult Delete([FromUri] int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Invalid Id");
+            }
+
+            students studentInDB = _studentRepository.GetById(id);
+            if(studentInDB == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _studentRepository.Delete(studentInDB);
+                return Ok();
+            }
+        }
     }
 }
