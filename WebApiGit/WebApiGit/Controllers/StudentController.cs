@@ -29,5 +29,24 @@ namespace WebApiGit.Controllers
             }
             else return Ok(studentList);
         }
+
+        //GET api/5/student
+        [HttpGet]
+        [Route("api/{id}/student")]
+        public IHttpActionResult Get([FromUri] int id)
+        {
+            students studentInDB = _studentRepository.GetById(id);
+            if(studentInDB == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                StudentModel studentDTO = _studentRepository.GetStudentDTO(studentInDB);
+                return Ok(studentDTO);
+            }
+        }
+
+        
     }
 }
