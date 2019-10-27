@@ -47,6 +47,20 @@ namespace WebApiGit.Controllers
             }
         }
 
-        
+        //POST api/student
+        [HttpPost]
+        [Route("api/student")]
+        public IHttpActionResult Post([FromBody] StudentModel studentModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Model State");
+            }
+            else
+            {
+                _studentRepository.Create(studentModel);
+                return Ok();
+            }
+        }
     }
 }
