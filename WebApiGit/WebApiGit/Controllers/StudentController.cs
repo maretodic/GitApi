@@ -62,5 +62,28 @@ namespace WebApiGit.Controllers
                 return Ok();
             }
         }
+
+        //PUT api/5/student
+        [HttpPut]
+        [Route("api/{id}/student")]
+        public IHttpActionResult Put([FromUri] int id, [FromBody] StudentModel studentModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Model State");
+            }
+
+            students studentInDb = _studentRepository.GetById(id);
+
+            if(studentInDb == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _studentRepository.Edit(studentInDb, studentModel);
+                return Ok();
+            }
+        }
     }
 }
