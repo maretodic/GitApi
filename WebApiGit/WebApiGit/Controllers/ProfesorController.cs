@@ -16,5 +16,18 @@ namespace WebApiGit.Controllers
         {
             this._profesorRepository = profesorRepository;
         }
+
+        //GET: api/profesor
+        [HttpGet]
+        [Route("api/profesor")]
+        public IHttpActionResult Get()
+        {
+            List<ProfesorModel> ListDTO = _profesorRepository.Get();
+            if (ListDTO.Count == 0)
+            {
+                return NotFound();
+            }
+            else return Ok(ListDTO);
+        }
     }
 }
