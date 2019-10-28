@@ -29,5 +29,22 @@ namespace WebApiGit.Controllers
             }
             else return Ok(ListDTO);
         }
+
+        //GET: api/5/profesor
+        [HttpGet]
+        [Route("api/{id}/profesor")]
+        public IHttpActionResult Get(int id)
+        {
+            profesors profesorInDB = _profesorRepository.GetById(id);
+            if (profesorInDB == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                ProfesorModel profesorDTO = _profesorRepository.GetProfesorDTO(profesorInDB);
+                return Ok(profesorDTO);
+            }
+        }
     }
 }
