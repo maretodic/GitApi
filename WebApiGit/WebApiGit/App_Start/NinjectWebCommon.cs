@@ -68,6 +68,7 @@ namespace WebApiGit.App_Start
             kernel.Bind<DbContext>().To<api_testEntities>().InRequestScope();
             kernel.Bind<IPredmetRepository>().To<PredmetRepository>().InRequestScope();
             kernel.Bind<IStudentRepository>().To<StudentRepository>().InRequestScope();
+            kernel.Bind<IProfesorRepository>().To<ProfesorRepository>().InRequestScope();
         }        
     }
 }
