@@ -14,5 +14,6 @@ namespace WebApiGit.Repository.IRepository
         void Edit(predmet predmetInDb, PredmetModel predmetModel);
         void Delete(predmet predmetInDb);
         predmet GetById(int id);
+        PredmetModel GetPredmetDTO(predmet predmetInDb);
     }
 }

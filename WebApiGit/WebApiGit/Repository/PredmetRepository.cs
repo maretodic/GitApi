@@ -43,6 +43,12 @@ namespace WebApiGit.Repository
         {
             return context.predmet.FirstOrDefault(x => x.id == id);
         }
+
+        public PredmetModel GetPredmetDTO(predmet predmetInDb)
+        {
+            PredmetModel predmetDTO = new PredmetModel();
+            return Mapper.Map(predmetInDb, predmetDTO);
+        }
     }
 
 }
