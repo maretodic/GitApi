@@ -46,5 +46,21 @@ namespace WebApiGit.Controllers
                 return Ok(profesorDTO);
             }
         }
+
+        //POST: api/profesor
+        [HttpPost]
+        [Route("api/{id}/profesor")]
+        public IHttpActionResult Post(ProfesorModel profesorDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Data");
+            }
+            else
+            {
+                _profesorRepository.Create(profesorDTO);
+                return Ok();
+            }
+        }
     }
 }
