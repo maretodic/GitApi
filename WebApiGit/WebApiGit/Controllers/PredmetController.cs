@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using AutoMapper;
 using WebApiGit.Models;
 using WebApiGit.Repository.IRepository;
 
@@ -43,8 +42,7 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                PredmetModel predmetModel = new PredmetModel();
-                Mapper.Map(predmetInDB, predmetModel);
+                PredmetModel predmetModel = _predmetRepository.GetPredmetDTO(predmetInDB);
                 return Ok(predmetModel);
             }
         }
