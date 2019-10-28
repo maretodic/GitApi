@@ -50,7 +50,7 @@ namespace WebApiGit.Controllers
         //POST: api/profesor
         [HttpPost]
         [Route("api/{id}/profesor")]
-        public IHttpActionResult Post(ProfesorModel profesorDTO)
+        public IHttpActionResult Post([FromBody]ProfesorModel profesorDTO)
         {
             if (!ModelState.IsValid)
             {
@@ -62,5 +62,6 @@ namespace WebApiGit.Controllers
                 return Ok();
             }
         }
+
     }
 }
