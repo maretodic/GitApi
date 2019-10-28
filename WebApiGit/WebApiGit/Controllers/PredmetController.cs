@@ -68,14 +68,14 @@ namespace WebApiGit.Controllers
         //PUT: api/predmet
         [HttpPut]
         [Route("api/predmet")]
-        public IHttpActionResult Put([FromBody] PredmetModel predmetModel)
+        public IHttpActionResult Put([FromUri] int id, [FromBody] PredmetModel predmetModel)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest("Invalid Data");
             }
 
-            predmet predmetInDb = _predmetRepository.GetById(predmetModel.ID);
+            predmet predmetInDb = _predmetRepository.GetById(id);
 
             if (predmetInDb == null)
             {
