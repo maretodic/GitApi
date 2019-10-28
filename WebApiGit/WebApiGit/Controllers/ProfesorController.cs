@@ -63,5 +63,26 @@ namespace WebApiGit.Controllers
             }
         }
 
+        //PUT: api/5/profesor
+        [HttpPut]
+        [Route("api/{id}/profesor")]
+        public IHttpActionResult Put([FromUri]int id, [FromBody] ProfesorModel profesorDTO)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("Invalid Data");
+            }
+
+            profesors profesorInDB = _profesorRepository.GetById(id);
+            if(profesorInDB == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _profesorRepository.Edit(profesorInDB, profesorDTO);
+                return Ok();
+            }
+        }
     }
 }
