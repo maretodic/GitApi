@@ -228,6 +228,7 @@
     <Compile Include="Repository\IRepository\IProfesorRepository.cs" />
     <Compile Include="Repository\IRepository\IStudentRepository.cs" />
     <Compile Include="Repository\PredmetRepository.cs" />
+    <Compile Include="Repository\ProfesorRepository.cs" />
     <Compile Include="Repository\StudentRepository.cs" />
     <Compile Include="students.cs">
       <DependentUpon>Model1.tt</DependentUpon>
