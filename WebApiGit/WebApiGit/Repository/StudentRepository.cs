@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using AutoMapper;
-using WebApiGit.Models;
+using System.Data.Entity;
 using WebApiGit.Repository.IRepository;
 
 namespace WebApiGit.Repository
@@ -15,40 +14,30 @@ namespace WebApiGit.Repository
 
         }
 
-        public void Create(StudentModel studentModel)
+        public void Create(students studentInDb)
         {
-            students studentForDB = new students();
-            Mapper.Map(studentModel, studentForDB);
-            context.students.Add(studentForDB);
-            SaveChanges();
+            context.students.Add(studentInDb);
         }
 
-        public void Delete(students studentInDB)
+        public void Delete(int id)
         {
-            context.students.Remove(studentInDB);
-            SaveChanges();
+            students students = this.GetById(id);
+            context.students.Remove(students);
         }
 
-        public void Edit(students studentInDb, StudentModel studentModel)
+        public void Edit(students studentInDb)
         {
-            Mapper.Map(studentModel, studentInDb);
-            SaveChanges();
+            context.Entry(studentInDb).State = EntityState.Modified;
         }
 
-        public List<StudentModel> Get()
+        public List<students> Get()
         {
-            return context.students.ToList().Select(Mapper.Map<students, StudentModel>).ToList();
+            return context.students.ToList();
         }
 
         public students GetById(int id)
         {
-            return context.students.FirstOrDefault(x => x.id == id);
-        }
-
-        public StudentModel GetStudentDTO(students studentInDb)
-        {
-            StudentModel studentModel = new StudentModel();
-            return Mapper.Map(studentInDb, studentModel);
+            return context.students.SingleOrDefault(s => s.id == id);
         }
     }
 }

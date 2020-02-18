@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using AutoMapper;
 using WebApiGit.Models;
+using System.Data.Entity;
 using WebApiGit.Repository.IRepository;
 
 namespace WebApiGit.Repository
@@ -15,40 +16,29 @@ namespace WebApiGit.Repository
 
         }
 
-        public void Create(ProfesorModel profesorDTO)
+        public void Create(profesors profesorInDb)
         {
-            profesors profesorInDb = new profesors();
-            Mapper.Map(profesorDTO, profesorInDb);
             context.profesors.Add(profesorInDb);
-            SaveChanges();
         }
 
         public void Delete(profesors profesorInDb)
         {
             context.profesors.Remove(profesorInDb);
-            SaveChanges();
         }
 
-        public void Edit(profesors profesorInDb, ProfesorModel profesorDTO)
+        public void Edit(profesors profesorInDb)
         {
-            Mapper.Map(profesorDTO, profesorInDb);
-            SaveChanges();
+            context.Entry(profesorInDb).State = EntityState.Modified;
         }
 
-        public List<ProfesorModel> Get()
+        public List<profesors> Get()
         {
-            return context.profesors.ToList().Select(Mapper.Map<profesors, ProfesorModel>).ToList();
+            return context.profesors.ToList();
         }
 
         public profesors GetById(int id)
         {
-            return context.profesors.FirstOrDefault(x => x.id == id);
-        }
-
-        public ProfesorModel GetProfesorDTO(profesors profesorInDb)
-        {
-            ProfesorModel profesorDTO = new ProfesorModel();
-            return Mapper.Map(profesorInDb, profesorDTO);
+            return context.profesors.Single(p => p.id == id);
         }
     }
 }

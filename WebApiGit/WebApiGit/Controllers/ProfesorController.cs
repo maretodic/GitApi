@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WebApiGit.Models;
+using AutoMapper;
 using WebApiGit.Repository.IRepository;
 
 namespace WebApiGit.Controllers
@@ -22,7 +23,7 @@ namespace WebApiGit.Controllers
         [Route("api/profesor")]
         public IHttpActionResult Get()
         {
-            List<ProfesorModel> ListDTO = _profesorRepository.Get();
+            List<ProfesorModel> ListDTO = _profesorRepository.Get().Select(Mapper.Map<profesors, ProfesorModel>).ToList();
             if (ListDTO.Count == 0)
             {
                 return NotFound();
@@ -42,7 +43,7 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                ProfesorModel profesorDTO = _profesorRepository.GetProfesorDTO(profesorInDB);
+                ProfesorModel profesorDTO = Mapper.Map<profesors, ProfesorModel>(profesorInDB);
                 return Ok(profesorDTO);
             }
         }
@@ -58,7 +59,9 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                _profesorRepository.Create(profesorDTO);
+                profesors profesor = Mapper.Map<ProfesorModel, profesors>(profesorDTO);
+                _profesorRepository.Create(profesor);
+                _profesorRepository.SaveChanges();
                 return Ok();
             }
         }
@@ -80,7 +83,9 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                _profesorRepository.Edit(profesorInDB, profesorDTO);
+                Mapper.Map(profesorDTO, profesorInDB);
+                _profesorRepository.Edit(profesorInDB);
+                _profesorRepository.SaveChanges();
                 return Ok();
             }
         }

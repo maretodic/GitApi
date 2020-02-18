@@ -9,11 +9,11 @@ namespace WebApiGit.Repository.IRepository
 {
     public interface IStudentRepository
     {
-        List<StudentModel> Get();
-        void Create(StudentModel studentModel);
-        void Edit(students studentInDb, StudentModel studentModel);
-        void Delete(students studentInDB);
+        List<students> Get();
+        void Create(students studentInDb);
+        void Edit(students studentInDb);
+        void Delete(int id);
         students GetById(int id);
-        StudentModel GetStudentDTO(students studentInDb);
+        void SaveChanges();
     }
 }

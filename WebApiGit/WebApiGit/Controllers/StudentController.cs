@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WebApiGit.Models;
+using AutoMapper;
 using WebApiGit.Repository.IRepository;
 
 namespace WebApiGit.Controllers
@@ -22,7 +23,7 @@ namespace WebApiGit.Controllers
         [Route("api/student")]
         public IHttpActionResult Get()
         {
-            List<StudentModel> studentList = _studentRepository.Get();
+            List<StudentModel> studentList = _studentRepository.Get().Select(Mapper.Map<students, StudentModel>).ToList();
             if (studentList.Count == 0)
             {
                 return NotFound();
@@ -42,7 +43,7 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                StudentModel studentDTO = _studentRepository.GetStudentDTO(studentInDB);
+                StudentModel studentDTO = Mapper.Map<students, StudentModel>(studentInDB);
                 return Ok(studentDTO);
             }
         }
@@ -58,7 +59,9 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                _studentRepository.Create(studentModel);
+                students student = Mapper.Map<StudentModel, students>(studentModel);
+                _studentRepository.Create(student);
+                _studentRepository.SaveChanges();
                 return Ok();
             }
         }
@@ -81,7 +84,9 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                _studentRepository.Edit(studentInDb, studentModel);
+                Mapper.Map(studentModel, studentInDb);
+                _studentRepository.Edit(studentInDb);
+                _studentRepository.SaveChanges();
                 return Ok();
             }
         }
@@ -103,7 +108,8 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                _studentRepository.Delete(studentInDB);
+                _studentRepository.Delete(id);
+                _studentRepository.SaveChanges();
                 return Ok();
             }
         }
