@@ -38,7 +38,7 @@ namespace WebApiGit.Repository
 
         public profesors GetById(int id)
         {
-            return context.profesors.Single(p => p.id == id);
+            return context.profesors.SingleOrDefault(p => p.id == id);
         }
     }
 }

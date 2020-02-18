@@ -109,7 +109,7 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                _predmetRepository.Delete(id);
+                _predmetRepository.Delete(predmetInDb);
                 _predmetRepository.SaveChanges();
                 return Ok();
             }

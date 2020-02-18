@@ -17,27 +17,27 @@ namespace WebApiGit.Repository
 
         public void Create(predmet predmetInDb)
         {
-            throw new NotImplementedException();
+            context.predmet.Add(predmetInDb);
         }
 
-        public void Delete(int id)
+        public void Delete(predmet predmetInDb)
         {
-            throw new NotImplementedException();
+            context.predmet.Remove(predmetInDb);
         }
 
         public void Edit(predmet predmetInDb)
         {
-            throw new NotImplementedException();
+            context.Entry(predmetInDb).State = EntityState.Modified;
         }
 
         public List<predmet> Get()
         {
-            throw new NotImplementedException();
+            return context.predmet.ToList();
         }
 
         public predmet GetById(int id)
         {
-            throw new NotImplementedException();
+            return context.predmet.SingleOrDefault(p => p.id == id);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace WebApiGit.Repository.IRepository
         List<predmet> Get();
         void Create(predmet predmetInDb);
         void Edit(predmet predmetInDb);
-        void Delete(int id);
+        void Delete(predmet predmetInDb);
         predmet GetById(int id);
         void SaveChanges();
     }
