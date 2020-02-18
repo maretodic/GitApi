@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using WebApiGit.Repository.IRepository;
 using WebApiGit.Models;
-using AutoMapper;
+using System.Data.Entity;
 
 namespace WebApiGit.Repository
 {
@@ -14,41 +14,31 @@ namespace WebApiGit.Repository
         {
 
         }
-        public void Create(PredmetModel predmetModel)
+
+        public void Create(predmet predmetInDb)
         {
-            predmet predmetForDB = new predmet();
-            Mapper.Map(predmetModel, predmetForDB);
-            context.predmet.Add(predmetForDB);
-            base.SaveChanges();
+            context.predmet.Add(predmetInDb);
         }
 
-        public void Delete(predmet predmetInDb)
+        public void Delete(int id)
         {
-            context.predmet.Remove(predmetInDb);
-            base.SaveChanges();
+            predmet predmet = this.GetById(id);
+            context.predmet.Remove(predmet);
         }
 
-        public void Edit(predmet predmetInDb, PredmetModel predmetModel)
+        public void Edit(predmet predmetInDb)
         {
-            Mapper.Map(predmetModel, predmetInDb);
-            base.SaveChanges();
+            context.Entry(predmetInDb).State = EntityState.Modified;
         }
 
-        public List<PredmetModel> Get()
+        public List<predmet> Get()
         {
-            return context.predmet.ToList().Select(Mapper.Map<predmet, PredmetModel>).ToList();
+            return context.predmet.ToList();
         }
 
         public predmet GetById(int id)
         {
-            return context.predmet.FirstOrDefault(x => x.id == id);
-        }
-
-        public PredmetModel GetPredmetDTO(predmet predmetInDb)
-        {
-            PredmetModel predmetDTO = new PredmetModel();
-            return Mapper.Map(predmetInDb, predmetDTO);
+            return context.predmet.Single(p => p.id == id);
         }
     }
-
 }

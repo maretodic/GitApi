@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using AutoMapper;
 using System.Web.Http;
 using WebApiGit.Models;
 using WebApiGit.Repository.IRepository;
@@ -22,7 +23,7 @@ namespace WebApiGit.Controllers
         [Route("api/predmet")]
         public IHttpActionResult Get()
         {
-            List<PredmetModel> list = _predmetRepository.Get();
+            List<PredmetModel> list = _predmetRepository.Get().Select(Mapper.Map<predmet, PredmetModel>).ToList();
             if (list.Count == 0)
             {
                 return NotFound();
@@ -42,7 +43,7 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                PredmetModel predmetModel = _predmetRepository.GetPredmetDTO(predmetInDB);
+                PredmetModel predmetModel = Mapper.Map<predmet, PredmetModel>(predmetInDB);
                 return Ok(predmetModel);
             }
         }
@@ -58,7 +59,9 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                _predmetRepository.Create(predmetModel);
+                predmet predmet = Mapper.Map<PredmetModel, predmet>(predmetModel);
+                _predmetRepository.Create(predmet);
+                _predmetRepository.SaveChanges();
                 return Ok();
             }
         }
@@ -81,7 +84,9 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                _predmetRepository.Edit(predmetInDb, predmetModel);
+                Mapper.Map(predmetModel, predmetInDb);
+                _predmetRepository.Edit(predmetInDb);
+                _predmetRepository.SaveChanges();
                 return Ok();
             }
         }
@@ -104,7 +109,7 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                _predmetRepository.Delete(predmetInDb);
+                _predmetRepository.Delete(id);
                 return Ok();
             }
         }

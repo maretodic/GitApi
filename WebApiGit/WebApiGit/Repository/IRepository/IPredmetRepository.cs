@@ -9,11 +9,11 @@ namespace WebApiGit.Repository.IRepository
 {
     public interface IPredmetRepository
     {
-        List<PredmetModel> Get();
-        void Create(PredmetModel predmetModel);
-        void Edit(predmet predmetInDb, PredmetModel predmetModel);
-        void Delete(predmet predmetInDb);
+        List<predmet> Get();
+        void Create(predmet predmetInDb);
+        void Edit(predmet predmetInDb);
+        void Delete(int id);
         predmet GetById(int id);
-        PredmetModel GetPredmetDTO(predmet predmetInDb);
+        void SaveChanges();
     }
 }
