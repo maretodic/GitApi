@@ -108,7 +108,7 @@ namespace WebApiGit.Controllers
             }
             else
             {
-                _studentRepository.Delete(id);
+                _studentRepository.Delete(studentInDB);
                 _studentRepository.SaveChanges();
                 return Ok();
             }

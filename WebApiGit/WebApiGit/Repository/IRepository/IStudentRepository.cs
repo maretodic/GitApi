@@ -12,7 +12,7 @@ namespace WebApiGit.Repository.IRepository
         List<students> Get();
         void Create(students studentInDb);
         void Edit(students studentInDb);
-        void Delete(int id);
+        void Delete(students studentInDb);
         students GetById(int id);
         void SaveChanges();
     }

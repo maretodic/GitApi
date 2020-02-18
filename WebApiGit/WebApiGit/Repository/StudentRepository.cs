@@ -19,10 +19,9 @@ namespace WebApiGit.Repository
             context.students.Add(studentInDb);
         }
 
-        public void Delete(int id)
+        public void Delete(students studentInDb)
         {
-            students students = this.GetById(id);
-            context.students.Remove(students);
+            context.students.Remove(studentInDb);
         }
 
         public void Edit(students studentInDb)
