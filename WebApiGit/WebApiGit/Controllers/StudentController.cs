@@ -7,15 +7,17 @@ using System.Web.Http;
 using WebApiGit.Models;
 using AutoMapper;
 using WebApiGit.Repository.IRepository;
+using WebApiGit.Persistence;
 
 namespace WebApiGit.Controllers
 {
     public class StudentController : ApiController
     {
-        private readonly IStudentRepository _studentRepository;
-        public StudentController(IStudentRepository studentRepository)
+        private UnitOfWork _unitOfWork;
+
+        public StudentController(UnitOfWork unitOfWork)
         {
-            this._studentRepository = studentRepository;
+            this._unitOfWork = unitOfWork;
         }
 
         //GET api/student
@@ -23,7 +25,8 @@ namespace WebApiGit.Controllers
         [Route("api/student")]
         public IHttpActionResult Get()
         {
-            List<StudentModel> studentList = _studentRepository.Get().Select(Mapper.Map<students, StudentModel>).ToList();
+            List<students> listDb = _unitOfWork.studentRepository.Get();
+            List<StudentModel> studentList = listDb.Select(Mapper.Map<students, StudentModel>).ToList();
             if (studentList.Count == 0)
             {
                 return NotFound();
@@ -36,8 +39,8 @@ namespace WebApiGit.Controllers
         [Route("api/{id}/student")]
         public IHttpActionResult Get([FromUri] int id)
         {
-            students studentInDB = _studentRepository.GetById(id);
-            if(studentInDB == null)
+            students studentInDB = _unitOfWork.studentRepository.FindSingleBy(s => s.id == id);
+            if (studentInDB == null)
             {
                 return NotFound();
             }
@@ -55,13 +58,13 @@ namespace WebApiGit.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid Model State");
+                return BadRequest(ModelState);
             }
             else
             {
                 students student = Mapper.Map<StudentModel, students>(studentModel);
-                _studentRepository.Create(student);
-                _studentRepository.SaveChanges();
+                _unitOfWork.studentRepository.Create(student);
+                _unitOfWork.SaveChanges();
                 return Ok();
             }
         }
@@ -73,20 +76,20 @@ namespace WebApiGit.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid Model State");
+                return BadRequest(ModelState);
             }
 
-            students studentInDb = _studentRepository.GetById(id);
+            students studentInDb = _unitOfWork.studentRepository.FindSingleBy(s => s.id == id);
 
-            if(studentInDb == null)
+            if (studentInDb == null)
             {
                 return NotFound();
             }
             else
             {
                 Mapper.Map(studentModel, studentInDb);
-                _studentRepository.Edit(studentInDb);
-                _studentRepository.SaveChanges();
+                _unitOfWork.studentRepository.Edit(studentInDb);
+                _unitOfWork.SaveChanges();
                 return Ok();
             }
         }
@@ -101,15 +104,15 @@ namespace WebApiGit.Controllers
                 return BadRequest("Invalid Id");
             }
 
-            students studentInDB = _studentRepository.GetById(id);
-            if(studentInDB == null)
+            students studentInDB = _unitOfWork.studentRepository.FindSingleBy(s => s.id == id);
+            if (studentInDB == null)
             {
                 return NotFound();
             }
             else
             {
-                _studentRepository.Delete(studentInDB);
-                _studentRepository.SaveChanges();
+                _unitOfWork.studentRepository.Delete(studentInDB);
+                _unitOfWork.SaveChanges();
                 return Ok();
             }
         }

@@ -7,15 +7,17 @@ using System.Web.Http;
 using WebApiGit.Models;
 using AutoMapper;
 using WebApiGit.Repository.IRepository;
+using WebApiGit.Persistence;
 
 namespace WebApiGit.Controllers
 {
     public class ProfesorController : ApiController
     {
-        private readonly IProfesorRepository _profesorRepository;
-        public ProfesorController(IProfesorRepository profesorRepository)
+        private UnitOfWork _unitOfWork;
+
+        public ProfesorController(UnitOfWork unitOfWork)
         {
-            this._profesorRepository = profesorRepository;
+            this._unitOfWork = unitOfWork;
         }
 
         //GET: api/profesor
@@ -23,7 +25,8 @@ namespace WebApiGit.Controllers
         [Route("api/profesor")]
         public IHttpActionResult Get()
         {
-            List<ProfesorModel> ListDTO = _profesorRepository.Get().Select(Mapper.Map<profesors, ProfesorModel>).ToList();
+            List<profesors> listDb = _unitOfWork.profesorRepository.Get();
+            List<ProfesorModel> ListDTO = listDb.Select(Mapper.Map<profesors, ProfesorModel>).ToList();
             if (ListDTO.Count == 0)
             {
                 return NotFound();
@@ -36,7 +39,7 @@ namespace WebApiGit.Controllers
         [Route("api/{id}/profesor")]
         public IHttpActionResult Get(int id)
         {
-            profesors profesorInDB = _profesorRepository.GetById(id);
+            profesors profesorInDB = _unitOfWork.profesorRepository.GetById(id);
             if (profesorInDB == null)
             {
                 return NotFound();
@@ -51,17 +54,17 @@ namespace WebApiGit.Controllers
         //POST: api/profesor
         [HttpPost]
         [Route("api/{id}/profesor")]
-        public IHttpActionResult Post([FromBody]ProfesorModel profesorDTO)
+        public IHttpActionResult Post([FromBody] ProfesorModel profesorDTO)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid Data");
+                return BadRequest(ModelState);
             }
             else
             {
                 profesors profesor = Mapper.Map<ProfesorModel, profesors>(profesorDTO);
-                _profesorRepository.Create(profesor);
-                _profesorRepository.SaveChanges();
+                _unitOfWork.profesorRepository.Create(profesor);
+                _unitOfWork.SaveChanges();
                 return Ok();
             }
         }
@@ -69,23 +72,23 @@ namespace WebApiGit.Controllers
         //PUT: api/5/profesor
         [HttpPut]
         [Route("api/{id}/profesor")]
-        public IHttpActionResult Put([FromUri]int id, [FromBody] ProfesorModel profesorDTO)
+        public IHttpActionResult Put([FromUri] int id, [FromBody] ProfesorModel profesorDTO)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid Data");
+                return BadRequest(ModelState);
             }
 
-            profesors profesorInDB = _profesorRepository.GetById(id);
-            if(profesorInDB == null)
+            profesors profesorInDB = _unitOfWork.profesorRepository.GetById(id);
+            if (profesorInDB == null)
             {
                 return NotFound();
             }
             else
             {
                 Mapper.Map(profesorDTO, profesorInDB);
-                _profesorRepository.Edit(profesorInDB);
-                _profesorRepository.SaveChanges();
+                _unitOfWork.profesorRepository.Edit(profesorInDB);
+                _unitOfWork.SaveChanges();
                 return Ok();
             }
         }
@@ -100,14 +103,15 @@ namespace WebApiGit.Controllers
                 return BadRequest("Invalid id");
             }
 
-            profesors profesorInDb = _profesorRepository.GetById(id);
+            profesors profesorInDb = _unitOfWork.profesorRepository.GetById(id);
             if (profesorInDb == null)
             {
                 return NotFound();
             }
             else
             {
-                _profesorRepository.Delete(profesorInDb);
+                _unitOfWork.profesorRepository.Delete(profesorInDb);
+                _unitOfWork.SaveChanges();
                 return Ok();
             }
         }

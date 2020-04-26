@@ -15,20 +15,20 @@ namespace WebApiGit.App_Start
     using WebApiGit.Repository.IRepository;
     using System.Data.Entity;
 
-    public static class NinjectWebCommon 
+    public static class NinjectWebCommon
     {
         private static readonly Bootstrapper bootstrapper = new Bootstrapper();
 
         /// <summary>
         /// Starts the application
         /// </summary>
-        public static void Start() 
+        public static void Start()
         {
             DynamicModuleUtility.RegisterModule(typeof(OnePerRequestHttpModule));
             DynamicModuleUtility.RegisterModule(typeof(NinjectHttpModule));
             bootstrapper.Initialize(CreateKernel);
         }
-        
+
         /// <summary>
         /// Stops the application.
         /// </summary>
@@ -36,7 +36,7 @@ namespace WebApiGit.App_Start
         {
             bootstrapper.ShutDown();
         }
-        
+
         /// <summary>
         /// Creates the kernel that will manage your application.
         /// </summary>
@@ -66,9 +66,7 @@ namespace WebApiGit.App_Start
         private static void RegisterServices(IKernel kernel)
         {
             kernel.Bind<DbContext>().To<api_testEntities>().InRequestScope();
-            kernel.Bind<IPredmetRepository>().To<PredmetRepository>().InRequestScope();
-            kernel.Bind<IStudentRepository>().To<StudentRepository>().InRequestScope();
-            kernel.Bind<IProfesorRepository>().To<ProfesorRepository>().InRequestScope();
-        }        
+            kernel.Bind(typeof(IGenericRepository<>)).To(typeof(GenericRepository<>));
+        }
     }
 }

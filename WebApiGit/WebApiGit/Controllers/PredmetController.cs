@@ -7,15 +7,17 @@ using AutoMapper;
 using System.Web.Http;
 using WebApiGit.Models;
 using WebApiGit.Repository.IRepository;
+using WebApiGit.Persistence;
 
 namespace WebApiGit.Controllers
 {
     public class PredmetController : ApiController
     {
-        private readonly IPredmetRepository _predmetRepository;
-        public PredmetController(IPredmetRepository predmetRepository)
+        private readonly UnitOfWork _unitOfWork;
+
+        public PredmetController(UnitOfWork unitOfWork)
         {
-            this._predmetRepository = predmetRepository;
+            this._unitOfWork = unitOfWork;
         }
 
         //GET: api/predmet
@@ -23,7 +25,8 @@ namespace WebApiGit.Controllers
         [Route("api/predmet")]
         public IHttpActionResult Get()
         {
-            List<PredmetModel> list = _predmetRepository.Get().Select(Mapper.Map<predmet, PredmetModel>).ToList();
+            List<predmet> listDb = _unitOfWork.predmetRepository.Get();
+            List<PredmetModel> list = listDb.Select(Mapper.Map<predmet, PredmetModel>).ToList();
             if (list.Count == 0)
             {
                 return NotFound();
@@ -34,10 +37,10 @@ namespace WebApiGit.Controllers
         //GET: api/5/predmet
         [HttpGet]
         [Route("api/{id}/predmet")]
-        public IHttpActionResult GetByID([FromUri]int id)
+        public IHttpActionResult GetByID([FromUri] int id)
         {
-            predmet predmetInDB = _predmetRepository.GetById(id);
-            if(predmetInDB == null)
+            predmet predmetInDB = _unitOfWork.predmetRepository.FindSingleBy(p => p.id == id);
+            if (predmetInDB == null)
             {
                 return NotFound();
             }
@@ -55,13 +58,13 @@ namespace WebApiGit.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid Data");
+                return BadRequest(ModelState);
             }
             else
             {
                 predmet predmet = Mapper.Map<PredmetModel, predmet>(predmetModel);
-                _predmetRepository.Create(predmet);
-                _predmetRepository.SaveChanges();
+                _unitOfWork.predmetRepository.Create(predmet);
+                _unitOfWork.SaveChanges();
                 return Ok();
             }
         }
@@ -73,10 +76,10 @@ namespace WebApiGit.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid Data");
+                return BadRequest(ModelState);
             }
 
-            predmet predmetInDb = _predmetRepository.GetById(id);
+            predmet predmetInDb = _unitOfWork.predmetRepository.FindSingleBy(p => p.id == id);
 
             if (predmetInDb == null)
             {
@@ -85,8 +88,8 @@ namespace WebApiGit.Controllers
             else
             {
                 Mapper.Map(predmetModel, predmetInDb);
-                _predmetRepository.Edit(predmetInDb);
-                _predmetRepository.SaveChanges();
+                _unitOfWork.predmetRepository.Edit(predmetInDb);
+                _unitOfWork.SaveChanges();
                 return Ok();
             }
         }
@@ -96,21 +99,21 @@ namespace WebApiGit.Controllers
         [Route("api/{id}/predmet")]
         public IHttpActionResult Delete([FromUri] int id)
         {
-            if(id <= 0)
+            if (id <= 0)
             {
                 return BadRequest("Invalid Id");
             }
 
-            predmet predmetInDb = _predmetRepository.GetById(id);
+            predmet predmetInDb = _unitOfWork.predmetRepository.FindSingleBy(p => p.id == id);
 
-            if(predmetInDb == null)
+            if (predmetInDb == null)
             {
                 return NotFound();
             }
             else
             {
-                _predmetRepository.Delete(predmetInDb);
-                _predmetRepository.SaveChanges();
+                _unitOfWork.predmetRepository.Delete(predmetInDb);
+                _unitOfWork.SaveChanges();
                 return Ok();
             }
         }
